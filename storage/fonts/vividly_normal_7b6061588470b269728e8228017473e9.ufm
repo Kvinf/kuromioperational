@@ -1,0 +1,104 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/dompdf/php-font-lib
+EncodingScheme FontSpecific
+FontName Vividly
+FontSubfamily Regular
+UniqueID Calligraphr : Vividly Regular : 13-10-2020
+FullName Vividly Regular
+Version Version 001.003
+PostScriptName Vividly-Regular
+Description Created with Calligraphr.com
+PreferredFamily Vividly
+PreferredSubfamily Regular
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 50
+UnderlinePosition -125
+FontHeightOffset 90
+Ascender 666
+Descender -47
+FontBBox 33 -47 591 666
+StartCharMetrics 81
+U 0 ; WX 250 ; N .null ; G 1
+U 13 ; WX 250 ; N CR ; G 3
+U 32 ; WX 250 ; N space ; G 4
+U 33 ; WX 203 ; N exclam ; G 5
+U 34 ; WX 315 ; N quotedbl ; G 6
+U 35 ; WX 538 ; N numbersign ; G 7
+U 38 ; WX 492 ; N ampersand ; G 8
+U 39 ; WX 193 ; N quotesingle ; G 9
+U 40 ; WX 367 ; N parenleft ; G 10
+U 41 ; WX 375 ; N parenright ; G 11
+U 44 ; WX 211 ; N comma ; G 12
+U 45 ; WX 317 ; N hyphen ; G 13
+U 46 ; WX 214 ; N period ; G 14
+U 47 ; WX 381 ; N slash ; G 15
+U 48 ; WX 411 ; N zero ; G 16
+U 49 ; WX 195 ; N one ; G 17
+U 50 ; WX 395 ; N two ; G 18
+U 51 ; WX 381 ; N three ; G 19
+U 52 ; WX 407 ; N four ; G 20
+U 53 ; WX 460 ; N five ; G 21
+U 54 ; WX 445 ; N six ; G 22
+U 55 ; WX 446 ; N seven ; G 23
+U 56 ; WX 368 ; N eight ; G 24
+U 57 ; WX 396 ; N nine ; G 25
+U 58 ; WX 197 ; N colon ; G 26
+U 63 ; WX 371 ; N question ; G 27
+U 65 ; WX 394 ; N A ; G 28
+U 66 ; WX 434 ; N B ; G 29
+U 67 ; WX 472 ; N C ; G 30
+U 68 ; WX 457 ; N D ; G 31
+U 69 ; WX 379 ; N E ; G 32
+U 70 ; WX 410 ; N F ; G 33
+U 71 ; WX 464 ; N G ; G 34
+U 72 ; WX 493 ; N H ; G 35
+U 73 ; WX 210 ; N I ; G 36
+U 74 ; WX 390 ; N J ; G 37
+U 75 ; WX 460 ; N K ; G 38
+U 76 ; WX 352 ; N L ; G 39
+U 77 ; WX 558 ; N M ; G 40
+U 78 ; WX 470 ; N N ; G 41
+U 79 ; WX 519 ; N O ; G 42
+U 80 ; WX 423 ; N P ; G 43
+U 81 ; WX 574 ; N Q ; G 44
+U 82 ; WX 445 ; N R ; G 45
+U 83 ; WX 404 ; N S ; G 46
+U 84 ; WX 462 ; N T ; G 47
+U 85 ; WX 519 ; N U ; G 48
+U 86 ; WX 489 ; N V ; G 49
+U 87 ; WX 645 ; N W ; G 50
+U 88 ; WX 443 ; N X ; G 51
+U 89 ; WX 430 ; N Y ; G 52
+U 90 ; WX 454 ; N Z ; G 53
+U 97 ; WX 428 ; N a ; G 54
+U 98 ; WX 440 ; N b ; G 55
+U 99 ; WX 392 ; N c ; G 56
+U 100 ; WX 439 ; N d ; G 57
+U 101 ; WX 375 ; N e ; G 58
+U 102 ; WX 390 ; N f ; G 59
+U 103 ; WX 423 ; N g ; G 60
+U 104 ; WX 446 ; N h ; G 61
+U 105 ; WX 226 ; N i ; G 62
+U 106 ; WX 298 ; N j ; G 63
+U 107 ; WX 385 ; N k ; G 64
+U 108 ; WX 211 ; N l ; G 65
+U 109 ; WX 644 ; N m ; G 66
+U 110 ; WX 431 ; N n ; G 67
+U 111 ; WX 427 ; N o ; G 68
+U 112 ; WX 435 ; N p ; G 69
+U 113 ; WX 439 ; N q ; G 70
+U 114 ; WX 349 ; N r ; G 71
+U 115 ; WX 353 ; N s ; G 72
+U 116 ; WX 366 ; N t ; G 73
+U 117 ; WX 430 ; N u ; G 74
+U 118 ; WX 436 ; N v ; G 75
+U 119 ; WX 569 ; N w ; G 76
+U 120 ; WX 364 ; N x ; G 77
+U 121 ; WX 451 ; N y ; G 78
+U 122 ; WX 388 ; N z ; G 79
+U 160 ; WX 250 ; N nbsp ; G 80
+EndCharMetrics
+EndFontMetrics
