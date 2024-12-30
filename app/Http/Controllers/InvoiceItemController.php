@@ -99,7 +99,9 @@ class InvoiceItemController extends Controller
 
     
     public function generateReceiptPDF(Request $request)
-    {
+    {   
+        set_time_limit(300);
+
         $transaction = receipt::where("id", $request->id)->first();
 
         $items = InvoiceItem::where("invoiceId", $transaction->id)->get();
@@ -132,7 +134,6 @@ class InvoiceItemController extends Controller
               'Content-Disposition' => 'attachment; filename="invoice.png"',
           ]);
 
-        return $pdf->stream('invoice.pdf');
     }
 
 
