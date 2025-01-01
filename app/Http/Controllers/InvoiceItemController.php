@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Exception;
 use Imagick;
 
 
@@ -90,50 +91,62 @@ class InvoiceItemController extends Controller
         ];
 
         $pdf = Pdf::loadView('invoice', $data)
-          ->setPaper('a4', 'portrait')
-          ->setOption('isHtml5ParserEnabled', true)
-          ->setOption('isRemoteEnabled', true);
+            ->setPaper('a4', 'portrait')
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true);
 
         return $pdf->stream('invoice.pdf');
     }
 
-    
+
     public function generateReceiptPDF(Request $request)
-    {   
-        set_time_limit(300);
+    {
+        try {
+            set_time_limit(300);
 
-        $transaction = receipt::where("id", $request->id)->first();
+            $transaction = receipt::where("id", $request->id)->first();
 
-        $items = InvoiceItem::where("invoiceId", $transaction->id)->get();
+            $items = InvoiceItem::where("invoiceId", $transaction->id)->get();
 
-        error_log(Carbon::parse($transaction->created_at)->format('d F Y'));
+            error_log(Carbon::parse($transaction->created_at)->format('d F Y'));
 
-        $data = [
-            'transactionId' => $transaction->invoiceNumber,
-            'customerName' => $transaction->customerName,
-            'customerPhone' => $transaction->customerPhone,
-            'date' => Carbon::parse($transaction->created_at)->format('d F Y'),
-            'items' => $items,
-            'total' => $transaction->totalPrice,
-            'date' => now()->toFormattedDateString(),
-        ];
-        
-        $pdfContent = Pdf::loadView('invoice', $data)
-          ->setPaper('a4', 'portrait')
-          ->setOption('isHtml5ParserEnabled', true)
-          ->setOption('isRemoteEnabled', true)->output();
+            $data = [
+                'transactionId' => $transaction->invoiceNumber,
+                'customerName' => $transaction->customerName,
+                'customerPhone' => $transaction->customerPhone,
+                'date' => Carbon::parse($transaction->created_at)->format('d F Y'),
+                'items' => $items,
+                'total' => $transaction->totalPrice,
+                'date' => now()->toFormattedDateString(),
+            ];
 
-          $imagick = new Imagick();
-          $imagick->readImageBlob($pdfContent); // Read PDF from memory
-          $imagick->setImageFormat('jpg'); // Set the output format to PNG
-          $pngContent = $imagick->getImageBlob(); // Get the PNG as a binary blob
-      
-          // Return the PNG for download
-          return response($pngContent, 200, [
-              'Content-Type' => 'image/png',
-              'Content-Disposition' => 'attachment; filename="invoice.png"',
-          ]);
+            $pdfContent = Pdf::loadView('invoice', $data)
+                ->setPaper('a4', 'portrait')
+                ->setOption('isHtml5ParserEnabled', true)
+                ->setOption('isRemoteEnabled', true)
+                ->output();
 
+            // Save and process image
+            $tempPdfPath = storage_path('app/temp_invoice.pdf');
+            file_put_contents($tempPdfPath, $pdfContent);
+
+            $imagick = new Imagick();
+            $imagick->readImage($tempPdfPath);
+            $imagick->setImageFormat('jpg');
+            $imagick->setImageCompression(Imagick::COMPRESSION_JPEG);
+            $imagick->setImageCompressionQuality(80);
+            $pngContent = $imagick->getImageBlob();
+
+            unlink($tempPdfPath);
+
+            return response($pngContent, 200, [
+                'Content-Type' => 'image/png',
+                'Content-Disposition' => 'attachment; filename="invoice.png"',
+            ]);
+        } catch (Exception $ex) {
+            error_log($ex);
+            return back()->withErrors("Download Fail");
+        }
     }
 
 
@@ -141,7 +154,7 @@ class InvoiceItemController extends Controller
     {
         try {
             DB::beginTransaction();
-    
+
             $validated = $request->validate([
                 'item' => 'required|array',
                 'item.*' => 'exists:items,id',
@@ -150,24 +163,24 @@ class InvoiceItemController extends Controller
                 'customerName' => 'required',
                 'customerPhone' => 'required',
             ]);
-    
+
             $invoiceItem = receipt::create([
                 'InvoiceName' => "-",
                 'customerName' => $request->customerName,
                 'customerPhone' => $request->customerPhone,
                 'totalPrice' => 0
             ]);
-    
+
             $totalPrice = 0;
-    
+
             foreach ($request->item as $index => $itemId) {
                 $quantity = $request->qty[$index];
                 $price = $request->price[$index];
                 $name = $request->name[$index];
                 $piece = $request->pricePiece[$index];
-    
+
                 $totalPrice += $price;
-    
+
                 InvoiceItem::create([
                     'invoiceId' => $invoiceItem->id,
                     'itemPrice' => $price,
@@ -177,19 +190,17 @@ class InvoiceItemController extends Controller
                     'itemPricePiece' => $piece
                 ]);
             }
-    
+
             $invoiceItem->totalPrice = $totalPrice;
-    
+
             $invoiceItem->save();
-    
+
             DB::commit();
             return back()->withErrors("Insert Completed");
-    
         } catch (\Exception $ex) {
             DB::rollBack();
 
             return back()->withErrors("Insert Error: " . $ex->getMessage());
         }
     }
-    
 }
