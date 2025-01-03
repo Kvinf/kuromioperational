@@ -121,7 +121,7 @@
             <div style="float: left; width: 25%">PAY TO : </div>
             <div style="margin-left: 5%; width: 65%">
                 <div>Kurimi Bakes</div>
-                <div>08123566737</div>
+                <div>081283881777</div>
             </div>
         </div>
         <div class="customerItem" style="margin-top: 1px; margin-bottom: 1px">
