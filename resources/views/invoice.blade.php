@@ -30,9 +30,11 @@
             font-family: 'Vividly', sans-serif;
             color: white;
             font-size: 20px;
-            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path("logo3.png"))) }}');
-            background-size: 700px auto; /* Smaller size */
-            background-position: -212px 400px; /* Adjusted to align to the left and slightly down */
+            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo3.png'))) }}');
+            background-size: 700px auto;
+            /* Smaller size */
+            background-position: -212px 400px;
+            /* Adjusted to align to the left and slightly down */
             background-repeat: no-repeat;
         }
 
@@ -98,7 +100,8 @@
             position: absolute;
             bottom: 150px;
             left: 10px;
-            width: 300px; /* Adjusted to make it smaller */
+            width: 300px;
+            /* Adjusted to make it smaller */
             z-index: 1;
         }
     </style>
@@ -110,31 +113,41 @@
         <div class="customerItem">
             <div style="float: left; width: 25%">BILL TO : </div>
             <div style="margin-left: 5%; width: 65%">
-                <div>{{$customerName}}</div>
-                <div>{{$customerPhone}}</div>
+                <div>{{ $customerName }}</div>
+                <div>{{ $customerPhone }}</div>
             </div>
         </div>
         <div class="customerItem">
             <div style="float: left; width: 25%">PAY TO : </div>
             <div style="margin-left: 5%; width: 65%">
                 <div>Kurimi Bakes</div>
-                <div>08123566734</div>
+                <div>08123566737</div>
             </div>
         </div>
         <div class="customerItem" style="margin-top: 1px; margin-bottom: 1px">
-            <div style="width: 25%">PAYMENT TO: </div>
+            <div style="width: 90%">PAYMENT TO: </div>
         </div>
         <div class="customerItem" style="margin-top: 1px">
             <div style="float: left; width: 25%">BANK</div>
-            <div style="margin-left: 5%; width: 65%">BCA</div>
+            <div style="margin-left: 5%; width: 65%">
+                <div>BCA</div>
+                <div></div>
+            </div>
+
         </div>
         <div class="customerItem" style="margin-top: 1px;">
             <div style="float: left; width: 25%">Account Name</div>
-            <div style="margin-left: 5%; width: 65%">Kimberly Tam</div>
+            <div style="margin-left: 5%; width: 65%">
+                <div>Kimberly Tam</div>
+                <div></div>
+            </div>
         </div>
         <div class="customerItem" style="margin-top: 1px;">
             <div style="float: left; width: 25%">Account Number</div>
-            <div style="margin-left: 5%; width: 65%">3833877999</div>
+            <div style="margin-left: 5%; width: 65%">
+                <div>3833877999</div>
+                <div></div>
+            </div>
         </div>
     </div>
     <br />
@@ -147,10 +160,18 @@
         </colgroup>
         <thead>
             <tr>
-                <td style="padding-left:30px; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">DESCRIPTION</td>
-                <td style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">QUANTITY</td>
-                <td style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">PRICE</td>
-                <td style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">AMOUNT</td>
+                <td
+                    style="padding-left:30px; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">
+                    DESCRIPTION</td>
+                <td
+                    style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">
+                    QUANTITY</td>
+                <td
+                    style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">
+                    PRICE</td>
+                <td
+                    style="text-align: center; font-size: 20px; border: none; border-top: 1px solid white; border-bottom: 1px solid white;">
+                    AMOUNT</td>
             </tr>
         </thead>
         <tbody>
@@ -158,21 +179,24 @@
                 <tr>
                     <td style="padding-left:30px; width: 40%; border: none;">{{ $item->itemName }}</td>
                     <td style="text-align: center; width: 15%; border: none;">{{ $item->itemQty }}</td>
-                    <td style="text-align: center; width: 20%; border: none;">Rp. {{ number_format($item->itemPricePiece, 2) }}</td>
-                    <td style="text-align: center; width: 25%; border: none;">Rp. {{ number_format($item->itemPrice, 2) }}</td>
+                    <td style="text-align: center; width: 20%; border: none;">Rp.
+                        {{ number_format($item->itemPricePiece, 2) }}</td>
+                    <td style="text-align: center; width: 25%; border: none;">Rp.
+                        {{ number_format($item->itemPrice, 2) }}</td>
                 </tr>
             @endforeach
             <tr>
                 <td style="padding-left:30px; width: 45%; border: none; border-top: 1px solid white;"></td>
                 <td style="text-align: center; width: 15%; border: none; border-top: 1px solid white;"></td>
                 <td style="text-align: center; width: 20%; border: none; border-top: 1px solid white;">Total</td>
-                <td style="text-align: center; width: 25%; border: none; border-top: 1px solid white;">Rp. {{ number_format($total, 2) }}</td>
+                <td style="text-align: center; width: 25%; border: none; border-top: 1px solid white;">Rp.
+                    {{ number_format($total, 2) }}</td>
             </tr>
         </tbody>
     </table>
     <div class="customerItem" style="margin-top: 1px;">
         <div style="float: left; width: 25%">Invoice Number</div>
-        <div style="margin-left: 5%; width: 65%">{{$transactionId}}</div>
+        <div style="margin-left: 5%; width: 65%">{{ $transactionId }}</div>
     </div>
     <div class="customerItem" style="margin-top: 1px;">
         <div style="float: left; width: 25%">Date</div>
