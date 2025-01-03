@@ -133,15 +133,13 @@ class InvoiceItemController extends Controller
             $imagick = new Imagick();
             $imagick->readImage($tempPdfPath);
             $imagick->setImageFormat('jpg');
-            $imagick->setImageCompression(Imagick::COMPRESSION_JPEG);
-            $imagick->setImageCompressionQuality(80);
             $pngContent = $imagick->getImageBlob();
 
             unlink($tempPdfPath);
 
             return response($pngContent, 200, [
-                'Content-Type' => 'image/png',
-                'Content-Disposition' => 'attachment; filename="invoice.png"',
+                'Content-Type' => 'image/jpg',
+                'Content-Disposition' => 'attachment; filename="invoice.jpg"',
             ]);
         } catch (Exception $ex) {
             error_log($ex);
