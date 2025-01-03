@@ -129,17 +129,33 @@ class InvoiceItemController extends Controller
             // Save and process image
             $tempPdfPath = storage_path('app/temp_invoice.pdf');
             file_put_contents($tempPdfPath, $pdfContent);
-
             $imagick = new Imagick();
+
+            // Set high resolution (DPI) for rendering
+            $imagick->setResolution(600, 600); // High DPI for better rendering quality
+            
+            // Read the PDF
             $imagick->readImage($tempPdfPath);
+            
+            // Set image format and quality
             $imagick->setImageFormat('jpg');
+            $imagick->setImageCompression(Imagick::COMPRESSION_JPEG);
+            $imagick->setImageCompressionQuality(100); // Maximum quality
+            
+            // Resize to 4K A4 dimensions (3840x2715 pixels)
+            $imagick->resizeImage(2715, 3840, Imagick::FILTER_LANCZOS, 1); // Maintain quality with Lanczos filter
+            
+            // Generate the final image blob
             $pngContent = $imagick->getImageBlob();
-
-            unlink($tempPdfPath);
-
+            
+            // Cleanup
+            $imagick->clear();
+            $imagick->destroy();
+            
+            // Return the image response
             return response($pngContent, 200, [
                 'Content-Type' => 'image/jpg',
-                'Content-Disposition' => 'attachment; filename="invoice.jpg"',
+                'Content-Disposition' => 'attachment; filename="invoice_4k_a4.jpg"',
             ]);
         } catch (Exception $ex) {
             error_log($ex);
