@@ -26,7 +26,7 @@ Route::middleware("auth")->group(function() {
 
     Route::get('/invoice',function()
     {
-        $item = receipt::get();
+        $item = receipt::orderBy("invoiceNumber","desc")->get();
         return view("receiptmanagement")->with('items',$item);
     })->name("invoiceview");
 
