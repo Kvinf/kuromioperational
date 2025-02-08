@@ -190,7 +190,7 @@
                 <td style="text-align: center; width: 15%; border: none; border-top: 1px solid white;"></td>
                 <td style="text-align: center; width: 20%; border: none; border-top: 1px solid white;">Total</td>
                 <td style="text-align: center; width: 25%; border: none; border-top: 1px solid white;">Rp.
-                    {{ number_format($total, 2) }}</td>
+                    {{ number_format($total) }}</td>
             </tr>
         </tbody>
     </table>

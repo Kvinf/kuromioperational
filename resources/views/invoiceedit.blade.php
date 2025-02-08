@@ -2,44 +2,53 @@
 @section('content')
     <h1>Invoice Management</h1>
     <br>
-    <form action="{{ route('addInvoiceItem') }}" method="POST">
+    <form action="{{ route('editItemInvoice') }}" method="POST">
         @csrf
 
         <div style="margin-bottom: 10px">
             <label style="width: 150px">Customer Name</label>
-            <input type="" name="customerName" class="itemInput" placeholder="Customer Name" id="customerName" />
+            <input type="" name="customerName" value="{{ $invoice->customerName }}" class="itemInput" id="customerName"
+                placeholder="Customer Name" />
         </div>
 
         <div style="margin-bottom: 10px">
             <label style="width: 150px">Customer Phone</label>
-            <input type="" name="customerPhone" class="itemInput" placeholder="Customer Phone" id="customerPhone" />
+            <input type="" name="customerPhone" value="{{ $invoice->customerPhone }}" class="itemInput"
+                id="customerPhone" placeholder="Customer Phone" />
         </div>
         <button type="button" id="searchPhoneButton" class="buttonCustom">Search Phone</button>
 
+        <input type="hidden" value="{{ $invoice->id }}" name="id" />
         <div id="formArray">
-            <div class="formSection">
-                <label>Item</label>
-                <select name="item[]" class="item-select">
-                    @foreach ($items as $index => $item)
-                        <option value="{{ $item->id }}" data-name="{{ $item->name }}"
-                            data-price="{{ $item->price }}">{{ $item->name }}</option>
-                    @endforeach
-                </select>
-                <input type="hidden" name="name[]" class="itemName" placeholder="name" />
-                <input type="hidden" name="price[]" class="itemPrice" placeholder="price" />
-                <input type="hidden" name="pricePiece[]" class="itemPricePiece" placeholder="piece" />
-
-                <input type="number" name="qty[]" class="quantity-input" placeholder="Quantity" />
-                <label class="total-price">Rp. 0</label>
-                <button type="button" class="delete-button">-</button>
-            </div>
+            @foreach ($invoiceItems as $invoiceItem)
+                <div class="formSection">
+                    <label>Item</label>
+                    <select name="item[]" class="item-select">
+                        @foreach ($items as $index => $item)
+                            <option value="{{ $item->id }}" data-name="{{ $item->name }}"
+                                data-price="{{ $item->price }}" {{ $item->id == $invoiceItem->itemId ? 'selected' : '' }}>
+                                {{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="name[]" class="itemName" placeholder="name"
+                        value="{{ $invoiceItem->itemName }}" />
+                    <input type="hidden" name="price[]" class="itemPrice" placeholder="price"
+                        value="{{ $invoiceItem->itemPrice }}" />
+                    <input type="hidden" name="pricePiece[]" class="itemPricePiece" placeholder="piece"
+                        value="{{ $invoiceItem->itemPricePiece }}" />
+                    <input type="number" name="qty[]" class="quantity-input" placeholder="Quantity"
+                        value="{{ $invoiceItem->itemQty }}" />
+                    <label class="total-price">Rp. {{ number_format($invoiceItem->itemPrice) }}</label>
+                    <button type="button" class="delete-button">-</button>
+                </div>
+            @endforeach
         </div>
         <br />
 
         <button type="button" class="buttonCustom" id="addFieldButton">Add Another Item</button>
         <br />
 
-        <button type="submit" class="buttonCustom">Issue</button>
+        <button type="submit" class="buttonCustom">Edit</button>
     </form>
 
     <script>

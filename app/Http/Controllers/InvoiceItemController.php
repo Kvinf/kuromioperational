@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InvoiceItem;
 use App\Http\Controllers\Controller;
+use App\Models\phoneCredential;
 use App\Models\receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -133,25 +134,25 @@ class InvoiceItemController extends Controller
 
             // Set high resolution (DPI) for rendering
             $imagick->setResolution(600, 600); // High DPI for better rendering quality
-            
+
             // Read the PDF
             $imagick->readImage($tempPdfPath);
-            
+
             // Set image format and quality
             $imagick->setImageFormat('jpg');
             $imagick->setImageCompression(Imagick::COMPRESSION_JPEG);
             $imagick->setImageCompressionQuality(100); // Maximum quality
-            
+
             // Resize to 4K A4 dimensions (3840x2715 pixels)
             $imagick->resizeImage(2715, 3840, Imagick::FILTER_LANCZOS, 1); // Maintain quality with Lanczos filter
-            
+
             // Generate the final image blob
             $pngContent = $imagick->getImageBlob();
-            
+
             // Cleanup
             $imagick->clear();
             $imagick->destroy();
-            
+
             // Return the image response
             return response($pngContent, 200, [
                 'Content-Type' => 'image/jpg',
@@ -163,6 +164,101 @@ class InvoiceItemController extends Controller
         }
     }
 
+    public function editInvoice(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+                'id' => 'required',
+                'item' => 'required|array',
+                'item.*' => 'exists:items,id',
+                'qty' => 'required|array',
+                'qty.*' => 'integer|min:1',
+                'customerName' => 'required',
+                'customerPhone' => 'required',
+            ]);
+
+
+            $invoiceItem = receipt::where("id", $request->id)->first();
+
+            error_log($invoiceItem);
+
+
+            if ($invoiceItem) {
+
+                InvoiceItem::where("invoiceId", $invoiceItem->id)->delete();
+                $totalPrice = 0;
+
+                foreach ($request->item as $index => $itemId) {
+
+                    $quantity = $request->qty[$index];
+                    $price = $request->price[$index];
+                    $name = $request->name[$index];
+                    $piece = $request->pricePiece[$index];
+
+                    $totalPrice += $price;
+
+                    InvoiceItem::create([
+                        'invoiceId' => $invoiceItem->id,
+                        'itemPrice' => $price,
+                        'itemName' => $name,
+                        'itemQty' => $quantity,
+                        'itemId' => $itemId,
+                        'itemPricePiece' => $piece
+                    ]);
+
+                    $invoiceItem->totalPrice = $totalPrice;
+                    $invoiceItem->save();
+                }
+
+                $customerPhone = phoneCredential::where("customerPhone",$request->customerPhone)->first();
+
+
+                if (!$customerPhone)
+                {
+                    phoneCredential::create([
+                        'customerName' => $request->customerName,
+                        'customerPhone' => $request->customerPhone,
+                    ]);
+                }
+            }
+
+
+
+            DB::commit();
+            return back()->withErrors("Update Completed");
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return back()->withErrors("Update Error: " . $ex->getMessage());
+        }
+    }
+
+    public function deleteInvoice(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+               'id' => 'required'
+            ]);
+
+            $invoice = receipt::where("id",$request->id)->first();
+
+            if ($invoice) 
+            {
+                receipt::where("id",$request->id)->delete();
+            }
+
+            DB::commit();
+            return back()->withErrors("Delete Completed");
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return back()->withErrors("Delete Error: " . $ex->getMessage());
+        }
+    }
 
     public function addInvoice(Request $request)
     {
@@ -208,6 +304,16 @@ class InvoiceItemController extends Controller
             $invoiceItem->totalPrice = $totalPrice;
 
             $invoiceItem->save();
+
+            $customerPhone = phoneCredential::where("customerPhone",$request->customerPhone)->first();
+
+            if (!$customerPhone)
+            {
+                phoneCredential::create([
+                    'customerName' => $request->customerName,
+                    'customerPhone' => $request->customerPhone,
+                ]);
+            }
 
             DB::commit();
             return back()->withErrors("Insert Completed");
