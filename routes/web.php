@@ -41,6 +41,9 @@ Route::middleware("auth")->group(function() {
     })->name("invoiceview");
 
     Route::post("/additem",[ItemController::class,'addItem'])->name("addItem");
+    Route::post("/updateItem",[ItemController::class,'updateItem'])->name("updateItem");
+    Route::post("/deleteItem",[ItemController::class,'deleteItem'])->name("deleteItem");
+
 
     Route::post("/addItemInvoice",[InvoiceItemController::class,'addInvoice'])->name("addInvoiceItem");
     Route::post("/editItemInvoice",[InvoiceItemController::class,'editInvoice'])->name("editItemInvoice");

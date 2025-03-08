@@ -67,6 +67,70 @@ class ItemController extends Controller
         //
     }
 
+    public function deleteItem (Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+               'id' => 'required'
+            ]);
+
+            $invoice = item::where("id",$request->id)->first();
+
+            if ($invoice) 
+            {
+                item::where("id",$request->id)->delete();
+            }
+
+            DB::commit();
+            return back()->withErrors("Delete Completed");
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return back()->withErrors("Delete Error: " . $ex->getMessage());
+        }
+
+    }
+
+    public function updateItem (Request $request)
+    {
+
+        try
+        {
+            $validateData = $request->validate([
+                'id' => 'required',
+                'name' => 'required',
+                'price' => 'required',
+            ]);
+
+            DB::beginTransaction();
+
+            $item = item::where('id',$validateData["id"])->first();
+
+            if ($item)
+            {   
+                item::where('id', $validateData['id'])->update([
+                    'name' => $validateData['name'],
+                    'price' => $validateData['price']
+                ]);
+    
+            }
+
+            DB::commit();
+
+            return back()->withErrors("Update Completed");
+
+        }
+        catch (Exception $ex)
+        {
+            DB::rollBack();
+            return back()->withErrors("Update Error" + $ex->getMessage());
+
+        }
+
+    }
+
     public function addItem (Request $request)
     {
 

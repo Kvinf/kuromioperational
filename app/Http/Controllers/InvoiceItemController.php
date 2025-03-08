@@ -144,7 +144,7 @@ class InvoiceItemController extends Controller
             $imagick->setImageCompressionQuality(100); // Maximum quality
 
             // Resize to 4K A4 dimensions (3840x2715 pixels)
-            $imagick->resizeImage(2715, 3840, Imagick::FILTER_LANCZOS, 1); // Maintain quality with Lanczos filter
+            $imagick->resizeImage(1448, 2048, Imagick::FILTER_LANCZOS, 1); // Maintain quality with Lanczos filter
 
             // Generate the final image blob
             $pngContent = $imagick->getImageBlob();
@@ -181,8 +181,6 @@ class InvoiceItemController extends Controller
 
 
             $invoiceItem = receipt::where("id", $request->id)->first();
-
-            error_log($invoiceItem);
 
 
             if ($invoiceItem) {
@@ -234,6 +232,7 @@ class InvoiceItemController extends Controller
             return back()->withErrors("Update Error: " . $ex->getMessage());
         }
     }
+
 
     public function deleteInvoice(Request $request)
     {
